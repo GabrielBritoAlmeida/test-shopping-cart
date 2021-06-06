@@ -7,6 +7,11 @@ describe("Cart", () => {
     price: 35388,
   };
 
+  let product2 = {
+    title: "Nike",
+    price: 350,
+  };
+
   beforeEach(() => {
     cart = new Cart();
   });
@@ -39,5 +44,21 @@ describe("Cart", () => {
     expect(cart.getTotalItems()).toEqual(1);
 
     expect(cart.getTotal()).toEqual(106164);
+  });
+
+  it("must ensure that different products are added to the shopping cart", () => {
+    cart.add({
+      product,
+      quantity: 2,
+    });
+
+    cart.add({
+      product: product2,
+      quantity: 1,
+    });
+
+    expect(cart.getTotalItems()).toEqual(2);
+
+    expect(cart.getTotal()).toEqual(71126);
   });
 });
