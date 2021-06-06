@@ -20,7 +20,6 @@ export default class Cart {
   }
 
   getTotalItems() {
-    console.log("🚀 ~ file: Cart.js ~ line 25 ~ Cart ~ getTotalItems ~ this.items", this.items)
     return this.items.length;
   }
 }
