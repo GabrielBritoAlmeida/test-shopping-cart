@@ -98,7 +98,16 @@ describe("Cart", () => {
     expect(cart.getTotal()).toEqual(0);
   });
 
-  describe("should check the getTotalItems method", () => {
+  it("must clean the cart", () => {
+    cart.checkout();
+
+    expect(cart.getTotalItems()).toEqual(0);
+
+    expect(cart.getTotal()).toEqual(0);
+
+  });
+
+  describe("getTotalItems", () => {
     it("should return 0 when getTotal() is executed in a newly created", () => {
       expect(cart.getTotal()).toEqual(0);
     });

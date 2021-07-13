@@ -39,10 +39,25 @@ export default class Cart {
     return this.items.length;
   }
 
-  checkout() {
+  summary() {
+    const total = this.getTotalItems();
+    const items = this.items;
+
     return {
-      total: this.getTotalItems(),
-      items: this.items
-    }
+      total,
+      items,
+    };
+  }
+
+  checkout() {
+    const total = this.getTotalItems();
+    const items = this.items;
+
+    this.items = [];
+
+    return {
+      total,
+      items,
+    };
   }
 }
