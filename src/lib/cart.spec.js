@@ -61,4 +61,44 @@ describe("Cart", () => {
 
     expect(cart.getTotal()).toEqual(71126);
   });
+
+
+  it("check if the quantity of products and total value are correct when removing the product", () => {
+    cart.add({
+      product,
+      quantity: 2,
+    });
+
+    cart.add({
+      product: product2,
+      quantity: 1,
+    });
+
+    cart.remove(product)
+
+    // 35388 +350 = 35738
+
+    expect(cart.getTotalItems()).toEqual(2);
+
+    expect(cart.getTotal()).toEqual(35738);
+  });
+
+  it("Use method to remove from cart, until the items are zeroed", () => {
+    cart.add({
+      product,
+      quantity: 1,
+    });
+
+    cart.add({
+      product: product2,
+      quantity: 1,
+    });
+
+    cart.remove(product)
+    cart.remove(product2)
+
+    expect(cart.getTotalItems()).toEqual(0);
+
+    expect(cart.getTotal()).toEqual(0);
+  });
 });
