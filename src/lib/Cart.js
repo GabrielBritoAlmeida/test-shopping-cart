@@ -38,4 +38,11 @@ export default class Cart {
   getTotalItems() {
     return this.items.length;
   }
+
+  checkout() {
+    return {
+      total: this.getTotalItems(),
+      items: this.items
+    }
+  }
 }

@@ -16,10 +16,6 @@ describe("Cart", () => {
     cart = new Cart();
   });
 
-  it("should return 0 when getTotal() is executed in a newly created", () => {
-    expect(cart.getTotal()).toEqual(0);
-  });
-
   it("should multiply quantity and price and receive the total amount", () => {
     const item = {
       product,
@@ -100,5 +96,59 @@ describe("Cart", () => {
     expect(cart.getTotalItems()).toEqual(0);
 
     expect(cart.getTotal()).toEqual(0);
+  });
+
+  describe("should check the getTotalItems method", () => {
+    it("should return 0 when getTotal() is executed in a newly created", () => {
+      expect(cart.getTotal()).toEqual(0);
+    });
+
+    it("should return the number of items in the cart", () => {
+      cart.add({
+        product,
+        quantity: 2,
+      });
+
+      cart.add({
+        product: product2,
+        quantity: 1,
+      });
+
+      expect(cart.getTotalItems()).toMatchInlineSnapshot(`2`);
+    });
+
+    it("should return the list with all items in the cart and total items in the cart.", () => {
+      cart.add({
+        product,
+        quantity: 2,
+      });
+
+      cart.add({
+        product: product2,
+        quantity: 1,
+      });
+
+      expect(cart.checkout()).toMatchInlineSnapshot(`
+        Object {
+          "items": Array [
+            Object {
+              "product": Object {
+                "price": 35388,
+                "title": "Adidas",
+              },
+              "quantity": 2,
+            },
+            Object {
+              "product": Object {
+                "price": 350,
+                "title": "Nike",
+              },
+              "quantity": 1,
+            },
+          ],
+          "total": 2,
+        }
+      `);
+    });
   });
 });
