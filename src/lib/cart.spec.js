@@ -15,6 +15,7 @@ describe("Cart", () => {
   beforeEach(() => {
     cart = new Cart();
   });
+
   it("should return 0 when getTotal() is executed in a newly created", () => {
     expect(cart.getTotal()).toEqual(0);
   });
@@ -62,7 +63,6 @@ describe("Cart", () => {
     expect(cart.getTotal()).toEqual(71126);
   });
 
-
   it("check if the quantity of products and total value are correct when removing the product", () => {
     cart.add({
       product,
@@ -74,7 +74,7 @@ describe("Cart", () => {
       quantity: 1,
     });
 
-    cart.remove(product)
+    cart.remove(product);
 
     // 35388 +350 = 35738
 
@@ -94,8 +94,8 @@ describe("Cart", () => {
       quantity: 1,
     });
 
-    cart.remove(product)
-    cart.remove(product2)
+    cart.remove(product);
+    cart.remove(product2);
 
     expect(cart.getTotalItems()).toEqual(0);
 
