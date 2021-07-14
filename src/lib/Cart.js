@@ -5,7 +5,6 @@ const Money = Dinero;
 Money.defaultCurrency = "BRL";
 Money.defaultPrecision = 2;
 
-
 export default class Cart {
   items = [];
 
@@ -39,7 +38,18 @@ export default class Cart {
 
   getTotal() {
     return this.items.reduce((total, item) => {
-      return total.add(Money({ amount: item.quantity * item.product.price }));
+      const amount = Money({ amount: item.quantity * item.product.price });
+      let discount = Money({ amount: 0 });
+
+      if (
+        item.condition &&
+        item.condition.percentage &&
+        item.quantity >= item.condition.minimum
+      ) {
+        discount = amount.percentage(item.condition.percentage);
+      }
+
+      return total.add(amount).subtract(discount);
     }, Money({ amount: 0 }));
   }
 
