@@ -1,10 +1,4 @@
 import Cart from "./Cart";
-import Dinero from "dinero.js";
-
-const Money = Dinero;
-
-Money.defaultCurrency = "BRL";
-Money.defaultPrecision = 2;
 
 describe("Cart", () => {
   let cart;
@@ -30,7 +24,7 @@ describe("Cart", () => {
 
     cart.add(item);
 
-    expect(cart.getTotal()).toEqual(70776);
+    expect(cart.getTotal().getAmount()).toEqual(70776);
   });
 
   it("should ensure no more than on product exist at a time", () => {
@@ -46,7 +40,7 @@ describe("Cart", () => {
 
     expect(cart.getTotalItems()).toEqual(1);
 
-    expect(cart.getTotal()).toEqual(106164);
+    expect(cart.getTotal().getAmount()).toEqual(106164);
   });
 
   it("must ensure that different products are added to the shopping cart", () => {
@@ -62,7 +56,7 @@ describe("Cart", () => {
 
     expect(cart.getTotalItems()).toEqual(2);
 
-    expect(cart.getTotal()).toEqual(71126);
+    expect(cart.getTotal().getAmount()).toEqual(71126);
   });
 
   it("check if the quantity of products and total value are correct when removing the product", () => {
@@ -82,7 +76,7 @@ describe("Cart", () => {
 
     expect(cart.getTotalItems()).toEqual(2);
 
-    expect(cart.getTotal()).toEqual(35738);
+    expect(cart.getTotal().getAmount()).toEqual(35738);
   });
 
   it("Use method to remove from cart, until the items are zeroed", () => {
@@ -101,7 +95,7 @@ describe("Cart", () => {
 
     expect(cart.getTotalItems()).toEqual(0);
 
-    expect(cart.getTotal()).toEqual(0);
+    expect(cart.getTotal().getAmount()).toEqual(0);
   });
 
   it("must clean the cart", () => {
@@ -109,12 +103,12 @@ describe("Cart", () => {
 
     expect(cart.getTotalItems()).toEqual(0);
 
-    expect(cart.getTotal()).toEqual(0);
+    expect(cart.getTotal().getAmount()).toEqual(0);
   });
 
   describe("getTotalItems", () => {
     it("should return 0 when getTotal() is executed in a newly created", () => {
-      expect(cart.getTotal()).toEqual(0);
+      expect(cart.getTotal().getAmount()).toEqual(0);
     });
 
     it("should return the number of items in the cart", () => {

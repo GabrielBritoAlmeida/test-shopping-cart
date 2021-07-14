@@ -1,3 +1,11 @@
+import Dinero from "dinero.js";
+
+const Money = Dinero;
+
+Money.defaultCurrency = "BRL";
+Money.defaultPrecision = 2;
+
+
 export default class Cart {
   items = [];
 
@@ -31,8 +39,8 @@ export default class Cart {
 
   getTotal() {
     return this.items.reduce((total, item) => {
-      return total + item.quantity * item.product.price;
-    }, 0);
+      return total.add(Money({ amount: item.quantity * item.product.price }));
+    }, Money({ amount: 0 }));
   }
 
   getTotalItems() {
