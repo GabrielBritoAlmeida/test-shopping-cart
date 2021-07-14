@@ -190,5 +190,34 @@ describe("Cart", () => {
 
       expect(cart.getTotal().getAmount()).toEqual(106164);
     });
+
+    it("should apply discount, according to quantity, take 2 pay 1.", () => {
+      const condition = {
+        quantity: 2,
+      };
+
+      cart.add({
+        product,
+        quantity: 4,
+        condition,
+      });
+
+      expect(cart.getTotal().getAmount()).toEqual(70776);
+    });
+    
+    
+    it("apply discount, according to quantity, take 2 pay 1, in odd quantity of products.", () => {
+      const condition = {
+        quantity: 2,
+      };
+
+      cart.add({
+        product,
+        quantity: 5,
+        condition,
+      });
+
+      expect(cart.getTotal().getAmount()).toEqual(106164);
+    });
   });
 });

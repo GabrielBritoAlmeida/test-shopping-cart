@@ -1,9 +1,34 @@
 import Dinero from "dinero.js";
-
 const Money = Dinero;
 
 Money.defaultCurrency = "BRL";
 Money.defaultPrecision = 2;
+
+const calculatePercentage = (amount, item) => {
+  if (item.condition?.percentage && item.quantity >= item.condition.minimum) {
+    return amount.percentage(item.condition.percentage);
+  }
+
+  return Money({ amount: 0 });
+};
+
+const calculatePercentageQuantity = (amount, item) => {
+  if (item.condition?.quantity && item.quantity >= item.condition?.quantity) {
+    const par = item.quantity % 2 === 0 ? true : false;
+
+    if (par) {
+      return amount.percentage(50);
+    }
+
+    if (!par && item.quantity > 2) {
+      return amount
+        .subtract(Money({ amount: item.product.price }))
+        .percentage(50);
+    }
+  }
+
+  return Money({ amount: 0 });
+};
 
 export default class Cart {
   items = [];
@@ -39,17 +64,10 @@ export default class Cart {
   getTotal() {
     return this.items.reduce((total, item) => {
       const amount = Money({ amount: item.quantity * item.product.price });
-      let discount = Money({ amount: 0 });
+      const discount = calculatePercentage(amount, item);
+      const discountQuantity = calculatePercentageQuantity(amount, item);
 
-      if (
-        item.condition &&
-        item.condition.percentage &&
-        item.quantity >= item.condition.minimum
-      ) {
-        discount = amount.percentage(item.condition.percentage);
-      }
-
-      return total.add(amount).subtract(discount);
+      return total.add(amount).subtract(discount).subtract(discountQuantity);
     }, Money({ amount: 0 }));
   }
 
