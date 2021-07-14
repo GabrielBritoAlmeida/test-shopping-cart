@@ -1,4 +1,10 @@
 import Cart from "./Cart";
+import Dinero from "dinero.js";
+
+const Money = Dinero;
+
+Money.defaultCurrency = "BRL";
+Money.defaultPrecision = 2;
 
 describe("Cart", () => {
   let cart;
@@ -104,7 +110,6 @@ describe("Cart", () => {
     expect(cart.getTotalItems()).toEqual(0);
 
     expect(cart.getTotal()).toEqual(0);
-
   });
 
   describe("getTotalItems", () => {
