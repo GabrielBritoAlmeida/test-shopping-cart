@@ -87,23 +87,56 @@ describe("Cart", () => {
 
     cart.add({
       product: product2,
-      quantity: 1,
+      quantity: 2,
     });
 
     cart.remove(product);
     cart.remove(product2);
+
+    expect(cart.getTotalItems()).toEqual(1);
+
+    expect(cart.getTotal().getAmount()).toEqual(350);
+  });
+
+  it("should clean the cart", () => {
+    cart.checkout();
 
     expect(cart.getTotalItems()).toEqual(0);
 
     expect(cart.getTotal().getAmount()).toEqual(0);
   });
 
-  it("must clean the cart", () => {
-    cart.checkout();
+  it("should consult total items and list of items, with summary method", () => {
+    cart.add({
+      product,
+      quantity: 2,
+    });
 
-    expect(cart.getTotalItems()).toEqual(0);
+    cart.add({
+      product: product2,
+      quantity: 1,
+    });
 
-    expect(cart.getTotal().getAmount()).toEqual(0);
+    expect(cart.summary().total).toEqual(2);
+
+    expect(cart.summary().items).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "product": Object {
+      "price": 35388,
+      "title": "Adidas",
+    },
+    "quantity": 2,
+  },
+  Object {
+    "product": Object {
+      "price": 350,
+      "title": "Nike",
+    },
+    "quantity": 1,
+  },
+]
+`);
   });
 
   describe("getTotalItems", () => {
@@ -204,8 +237,7 @@ describe("Cart", () => {
 
       expect(cart.getTotal().getAmount()).toEqual(70776);
     });
-    
-    
+
     it("apply discount, according to quantity, take 2 pay 1, in odd quantity of products.", () => {
       const condition = {
         quantity: 2,
@@ -218,6 +250,38 @@ describe("Cart", () => {
       });
 
       expect(cart.getTotal().getAmount()).toEqual(106164);
+    });
+
+    it("you should not apply a discount, as I have not reached the minimum number of products, in this case a minimum of 2 products.", () => {
+      const condition = {
+        quantity: 2,
+      };
+
+      cart.add({
+        product,
+        quantity: 1,
+        condition,
+      });
+      expect(cart.summary().total).toEqual(1);
+      expect(cart.getTotal().getAmount()).toEqual(35388);
+    });
+
+    it("should remove only one product out of a total of 3.", () => {
+      const condition = {
+        quantity: 2,
+      };
+
+      cart.add({
+        product,
+        quantity: 3,
+        condition,
+      });
+
+      cart.remove(product);
+      cart.remove(product);
+
+      expect(cart.summary().total).toEqual(1);
+      expect(cart.getTotal().getAmount()).toEqual(35388);
     });
   });
 });

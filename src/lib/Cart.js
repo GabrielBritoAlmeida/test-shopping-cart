@@ -59,6 +59,8 @@ export default class Cart {
         this.items = updatedCart;
       }
     }
+
+    return;
   }
 
   getTotal() {
