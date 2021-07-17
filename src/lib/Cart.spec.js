@@ -98,6 +98,19 @@ describe("Cart", () => {
     expect(cart.getTotal().getAmount()).toEqual(350);
   });
 
+  it("should try to remove an item that is not in the cart", () => {
+    cart.add({
+      product,
+      quantity: 1,
+    });
+
+    const productRemove = cart.remove(product2);
+
+    expect(productRemove).toEqual(null);
+
+    expect(cart.getTotal().getAmount()).toEqual(35388);
+  });
+
   it("should clean the cart", () => {
     cart.checkout();
 

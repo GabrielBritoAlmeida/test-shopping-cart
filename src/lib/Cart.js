@@ -36,7 +36,7 @@ export default class Cart {
       }
     }
 
-    return;
+    return null;
   }
 
   getTotal() {
