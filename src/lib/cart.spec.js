@@ -283,5 +283,26 @@ Array [
       expect(cart.summary().total).toEqual(1);
       expect(cart.getTotal().getAmount()).toEqual(35388);
     });
+
+    it("should apply the best discount", () => {
+      const condition = {
+        percentage: 30,
+        minimum: 2,
+      };
+
+      const condition2 = {
+        quantity: 2,
+      };
+
+      cart.add({
+        product,
+        quantity: 4,
+        condition: [condition2, condition],
+      });
+
+      expect(cart.getTotal().getAmount()).toEqual(70776);
+    });
+
+    
   });
 });

@@ -4,30 +4,56 @@ const Money = Dinero;
 Money.defaultCurrency = "BRL";
 Money.defaultPrecision = 2;
 
-const calculatePercentage = (amount, item) => {
-  if (item.condition?.percentage && item.quantity >= item.condition.minimum) {
-    return amount.percentage(item.condition.percentage);
+const calculatePercentage = (amount, itemProduct, condition) => {
+  if (condition.percentage && itemProduct.quantity >= condition.minimum) {
+    return amount.percentage(condition.percentage);
   }
 
   return Money({ amount: 0 });
 };
 
-const calculatePercentageQuantity = (amount, item) => {
-  if (item.condition?.quantity && item.quantity >= item.condition?.quantity) {
-    const par = item.quantity % 2 === 0 ? true : false;
+const calculatePercentageQuantity = (amount, itemProduct, condition) => {
+  if (condition.quantity && itemProduct.quantity >= condition.quantity) {
+    const par = itemProduct.quantity % 2 === 0 ? true : false;
 
     if (par) {
       return amount.percentage(50);
     }
 
-    if (!par && item.quantity > 2) {
+    if (!par && itemProduct.quantity > 2) {
       return amount
-        .subtract(Money({ amount: item.product.price }))
+        .subtract(Money({ amount: itemProduct.product.price }))
         .percentage(50);
     }
   }
 
   return Money({ amount: 0 });
+};
+
+const calculateBestDiscount = (amount, item) => {
+  const itemProduct = item;
+
+  if (item.condition) {
+    const condition = Array.isArray(item.condition)
+      ? item.condition
+      : [item.condition];
+
+    const [bestDiscount] = condition
+      .map((cond) => {
+        if (cond.percentage) {
+          return calculatePercentage(amount, itemProduct, cond);
+        }
+
+        if (cond.quantity) {
+          return calculatePercentageQuantity(amount, itemProduct, cond);
+        }
+      })
+      .sort((a, b) => b - a);
+
+    return bestDiscount;
+  }
+
+  return null;
 };
 
 export default class Cart {
@@ -66,10 +92,14 @@ export default class Cart {
   getTotal() {
     return this.items.reduce((total, item) => {
       const amount = Money({ amount: item.quantity * item.product.price });
-      const discount = calculatePercentage(amount, item);
-      const discountQuantity = calculatePercentageQuantity(amount, item);
+      const discount = calculateBestDiscount(amount, item);
+      // console.log("🚀 discount: ", discount.getAmount())
 
-      return total.add(amount).subtract(discount).subtract(discountQuantity);
+      if (discount) {
+        return total.add(amount).subtract(discount);
+      }
+
+      return total.add(amount);
     }, Money({ amount: 0 }));
   }
 
