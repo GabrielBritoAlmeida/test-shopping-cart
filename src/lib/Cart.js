@@ -4,57 +4,7 @@ const Money = Dinero;
 Money.defaultCurrency = "BRL";
 Money.defaultPrecision = 2;
 
-const calculatePercentage = (amount, quantity, {minimum, percentage}) => {
-  if (percentage && quantity >= minimum) {
-    return amount.percentage(percentage);
-  }
-
-  return Money({ amount: 0 });
-};
-
-const calculatePercentageQuantity = (amount, {quantity, product}, condition) => {
-  if (condition.quantity && quantity >= condition.quantity) {
-    const par = quantity % 2 === 0 ? true : false;
-
-    if (par) {
-      return amount.percentage(50);
-    }
-
-    if (!par && quantity > 2) {
-      return amount
-        .subtract(Money({ amount: product.price }))
-        .percentage(50);
-    }
-  }
-
-  return Money({ amount: 0 });
-};
-
-const calculateBestDiscount = (amount, item) => {
-  const itemProduct = item;
-
-  if (item.condition) {
-    const condition = Array.isArray(item.condition)
-      ? item.condition
-      : [item.condition];
-
-    const [bestDiscount] = condition
-      .map((cond) => {
-        if (cond.percentage) {
-          return calculatePercentage(amount, itemProduct.quantity, cond);
-        }
-
-        if (cond.quantity) {
-          return calculatePercentageQuantity(amount, itemProduct, cond);
-        }
-      })
-      .sort((a, b) => b - a);
-
-    return bestDiscount;
-  }
-
-  return null;
-};
+import { calculateBestDiscount } from "./discount.utils";
 
 export default class Cart {
   items = [];
@@ -93,7 +43,6 @@ export default class Cart {
     return this.items.reduce((total, item) => {
       const amount = Money({ amount: item.quantity * item.product.price });
       const discount = calculateBestDiscount(amount, item);
-      // console.log("🚀 discount: ", discount.getAmount())
 
       if (discount) {
         return total.add(amount).subtract(discount);
