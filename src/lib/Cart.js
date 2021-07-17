@@ -4,25 +4,25 @@ const Money = Dinero;
 Money.defaultCurrency = "BRL";
 Money.defaultPrecision = 2;
 
-const calculatePercentage = (amount, itemProduct, condition) => {
-  if (condition.percentage && itemProduct.quantity >= condition.minimum) {
-    return amount.percentage(condition.percentage);
+const calculatePercentage = (amount, quantity, {minimum, percentage}) => {
+  if (percentage && quantity >= minimum) {
+    return amount.percentage(percentage);
   }
 
   return Money({ amount: 0 });
 };
 
-const calculatePercentageQuantity = (amount, itemProduct, condition) => {
-  if (condition.quantity && itemProduct.quantity >= condition.quantity) {
-    const par = itemProduct.quantity % 2 === 0 ? true : false;
+const calculatePercentageQuantity = (amount, {quantity, product}, condition) => {
+  if (condition.quantity && quantity >= condition.quantity) {
+    const par = quantity % 2 === 0 ? true : false;
 
     if (par) {
       return amount.percentage(50);
     }
 
-    if (!par && itemProduct.quantity > 2) {
+    if (!par && quantity > 2) {
       return amount
-        .subtract(Money({ amount: itemProduct.product.price }))
+        .subtract(Money({ amount: product.price }))
         .percentage(50);
     }
   }
@@ -41,7 +41,7 @@ const calculateBestDiscount = (amount, item) => {
     const [bestDiscount] = condition
       .map((cond) => {
         if (cond.percentage) {
-          return calculatePercentage(amount, itemProduct, cond);
+          return calculatePercentage(amount, itemProduct.quantity, cond);
         }
 
         if (cond.quantity) {
