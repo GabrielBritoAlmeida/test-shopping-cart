@@ -33,8 +33,8 @@ const calculatePercentageQuantity = (
 };
 
 export const calculateBestDiscount = (amount, item) => {
-  const itemProduct = item;
-
+  debugger;
+  
   if (item.condition) {
     const condition = Array.isArray(item.condition)
       ? item.condition
@@ -43,11 +43,11 @@ export const calculateBestDiscount = (amount, item) => {
     const [bestDiscount] = condition
       .map((cond) => {
         if (cond.percentage) {
-          return calculatePercentage(amount, itemProduct.quantity, cond);
+          return calculatePercentage(amount, item.quantity, cond);
         }
 
         if (cond.quantity) {
-          return calculatePercentageQuantity(amount, itemProduct, cond);
+          return calculatePercentageQuantity(amount, item, cond);
         }
       })
       .sort((a, b) => b - a);
