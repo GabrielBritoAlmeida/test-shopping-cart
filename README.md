@@ -19,13 +19,13 @@ yarn install
 Testes:
 
 ```jsx
-test: watch;
+test:watch
 ```
 
 Cobertura:
 
 ```jsx
-test: coverage;
+test:coverage
 ```
 
 **devDependencies**
