@@ -1,12 +1,55 @@
-# test shopping cart
+# TDD - Carrinho de compras
 
-Pequeno projeto, para iniciar o estudo de testes. 
+Pequeno projeto que simula um carrinho de compras, para estudo de Jest com TDD
 
-Começando por pequenas funções locais e nativas. 
+Desenvolvida com o conceito de TDD.
 
-The project aims to deepen the test studies, with a small project that simulates a shopping cart.
+Projeto sem ‘interface’ gráfica, rodando apenas em Node, usando Jest para cobrir os testes.
 
-Technologies:
+Pouco mais de 18 testes aplicados.
 
-Jest
-Testing Library
+**Rodando projeto**
+
+Dependências:
+
+```jsx
+yarn install
+```
+
+Testes:
+
+```jsx
+test: watch;
+```
+
+Cobertura:
+
+```jsx
+test: coverage;
+```
+
+**devDependencies**
+
+```jsx
+"@babel/core": "^7.14.3",
+
+"@babel/preset-env": "^7.14.4",
+
+"@types/dinero.js": "^1.8.1",
+
+"@types/jest": "^26.0.23",
+
+"babel-jest": "^27.0.2",
+
+"jest": "^27.0.4",
+
+"ndb": "^1.1.5",
+
+"prettier": "^2.3.2"
+```
+
+**dependencies**
+
+```jsx
+"dinero.js": "^1.8.1"
+```
